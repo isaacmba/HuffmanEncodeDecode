@@ -7,7 +7,7 @@
 	Type the following into the command line/prompt the following to compile then run the program:
 >$ make main<br>
 >$ ./main  in1.txt in2.txt o1.txt o2.txt o3.txt o4.txt <br>
->enter file name: o2.txt<br>
+>$ enter file name: o2.txt<br>
 
 
 
