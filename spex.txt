@@ -1,0 +1,210 @@
+Project 5:  This project will include project 1 and project 3 plus two additional methods:  Encode method and Decode method.  In this project, your program will do the followings:
+
+Step1: Open a text file to compute the probabilities of characters in the file;
+    and store the char-prob pairs in two 1-D arrays (charCounts[256] 
+    as defined in project 1 with additional charCode [256]) in this project, 
+
+    Output the char-prob pairs to an output file, as in your project 1.
+
+Step 2:  Construct the ordered linked list from the char-prob pair and then,
+             from the ordered linked list to construct the Huffman binary tree
+             similar to your project 3. Output debugging print as in your project 3.
+
+Step 3: Open a text file to be encoded (see algorithm below)
+and outputs the encoded result (zero’s and 1’s ) to a text file.
+
+Step 4: Next, asks the user for the name of the text file (1’s and 0’s) that is to be decode. 
+Then,  do the decoding; then, 
+output the result of the decode text to an output file.  
+
+ (You will write only C++ for this project. )
+
+********************************
+Language: C++ 
+********************************
+Due Date:  C++  Soft copy: 10/7/2018 Sunday before midnight
+
+          C++  Hard copy: 10/9/2018 Tuesday in class
+
+********************************
+I. Inputs:
+  Input-1  (argv[1] ):  An English text file to compute char-prob pairs.
+  Input-2 (argv[2]):  An English text file for encoding.
+
+  Input-3 (the file name will be provide from the user from console):  
+Your program will ask the user for the name of the text file for encoding.
+
+********************************
+II. Outputs:  
+********************************
+- outFile1 (argv[3]): A text file contains the Huffman <char    , code> pairs 
+- outFile2 (argv[4]): A text file contains the encoded result.
+- outFile3 (argv[5]): A text file contains the decoded result.
+- outFile 4 (argv[6]):   for all the  debugging outputs. 
+
+
+
+********************************
+III. Data structure:
+********************************
+Reuse the data structures/classes from the specs of project 1 and project3; 
+You may add new data structure as needed.
+
+Pay attention to the following notes:
+
+1) In addition to charCounts[256] define in project 1, in this project, you add
+charCode [256] a 1D array of string to store the character codes.
+
+2) Space between words need to include in the counting!!!
+
+3)  Ignore all the asci character that is greater than 255 during your counting.
+
+4)  There are two very useful functions: atoi( ..) and itoa (..) ; atoi(a) converts asci, a, to integer 
+itoa (i) converts integer to asci. 
+Advise – all char variables to be declared as “unsign char” for easy programming!
+
+5) In this project we will be using the counts as prob to construct the linked list
+
+6)  Methods you coded in  project 1 and project 3 do need some minor update  (given below.)
+
+7) Add Encode method and Decode method as methods  in the data structure/class.
+
+******************************************
+IV.  Main (….)
+******************************************
+Step 0: inFile1 🡨 open input  file from argv[1]
+outFile1, outFile2, …, outFile4 🡨 open from argv[3], …, argv[6]
+
+Step 1: computeCount (inFile1) // see below for method update 
+Step 2: constructHuffmanLList  (charCounts, outFile4)  // see below for method update
+Step 3:  constructHuffmanBinTree (listHead, outFile4) // No update, same as project 3
+Step 4:  getCode (Root, ‘’, outFile1) // ‘’ is an empty string // see below for method update
+*** below are new for this project ***
+Step 5: inFile2 🡨 open input file from argv[2] // the text file for encoding
+Step 6: Encode (inFile2, outFile2)  // new method, see algorithm steps below
+Step 7: decodeFileName 🡨 ask user from console to provide the name of the file to be decode
+    // decodeFileName is a string variable!
+Step 8: decodeFile 🡨 open the decodeFileName
+Step 9: Decode (decodeFile, outFile3, Root) // new method, see algorithm steps below
+Step 10: close all files
+*******************************
+V. computeCount (inFile)
+*******************************  
+step 1: charIn 🡨 read the next character from inFile, one character at a time
+        // declare charIn as unsign char
+    
+step 2: index 🡨 cast charIn to integer // you may use atoi (charIn) function in C++
+
+step 3: charCounts[index]++
+
+step 4: repeat step 1 to step 3 while inFile is not empty
+
+step 5: printAry (outFile4) // see algorithm below
+
+*******************************
+VI. printAry (outFile) 
+*******************************  
+step 1: index 🡨0
+step 2: if charCounts[index] > 0
+           symbol 🡨 cast index to character // you may use itoa (index) function in C++
+           write symbol  charCounts[index]  per text line to outFile
+
+step 3: index ++
+
+step 4: repeat step 2 to step 3 while i < 256
+
+******************************************
+VII.  constructHuffmanLList  (charCounts[], outFile)  
+******************************************
+Step 1:  listHead 🡨 get a newNode as the dummy listNode with (“dummy” ,0),  listHead to point to.  
+Step 2: index 🡨 0
+Step 3: if charCount[index] > 0
+    chr  🡨 cast index to asci // you may use C++ itoa function 
+                Prob  🡨 charCounts [index]
+    newNode 🡨 get a new listNode
+            newNode.chStr 🡨 chr
+    newNode.prob 🡨 Prob
+    newNode.next 🡨 null
+spot 🡨 findSpot (listHead, newNode) // use algorithm steps given in class
+               insertOneNode(spot, newNode) // insert newNode after spot
+Step 4: index++
+Step 5: repeat step 3 – step 4 while index <= 255
+Step 6:  printList (listHead, outFile) 
+// print the list to outFile, from listHead to the end of the list 
+// using the format as in project 3.
+     // Note: This printList is outside of the loop, therefore, you will only print the list once!!!
+    
+    
+
+
+******************************************
+VIII. constructHuffmanBinTree (listHead, outFile) 
+******************************************
+ Step 1: newNode 🡨 create a treeNode
+        newNode’s prob 🡨 the sum of prob of the first and second node of the list // first is the node after dummy
+        newNode’s chStr 🡨 concatenate chStr of the first node and chStr of the second node in the list
+        newNode’s left 🡨 the first node of the list
+        newNode’s right 🡨 the second node of the list
+
+Step 2: spot 🡨 findSpot(listHead, newNode)  
+
+          insertOneNode (spot, newNode)  // inserting newNode between spot and spot.next.
+                // only need two statements.
+         listHead.next 🡨 listHead .next.next.next  //  
+
+    printList (listHead, outFile)  // 
+
+Step 3: repeat step 1 – step 2 until the list only has one node left which is the newNode
+
+Step 4:  Root 🡨 newNode
+
+******************************************
+VIIII.  getCode (T, code) 
+******************************************
+if  isLeaf (T)
+        
+     T.code 🡨 code;
+       Index 🡨cast T. chStr  to integer, you may use C++ atoi function
+    charCode[index] 🡨 code  
+    else 
+          constructCharCode (T->left, code + “0”) //string concatenation
+          constructCharCode (T->right, code + “1”) //string concatenation
+
+******************************************
+X. Encode (inFile, outFile)
+******************************************
+step 1: charIn 🡨 read the next character from inFile, one character at a time
+        // including spaces!!!
+
+step 2: index 🡨 cast charIn to integer  // You may use C++ atoi function
+
+step 3: code 🡨  charCode[index]
+
+step 4: write code to outFile  
+
+step 5: repeat step 1 to step 4 while inFile is not empty 
+
+
+
+
+
+******************************************
+XI. Decode (inFile, outFile, node) // a recursive function!
+******************************************
+
+if isLeaf (node)
+           Write node.chr to outFile
+         Decode (inFile, outFile, Root)
+else
+    if eof inFile  // and node is NOT a leaf
+    write error message “the encode file is a corrupted file”
+   else 
+ nextBit 🡨 read the next char from inFile
+if nextBit is ‘0’
+Decode (inFile, outFile, node’s left)
+                   If nextBit is ‘1’ 
+Decode (inFile, outFile, node’s right)
+
+    
+
+
